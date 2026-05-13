@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <textarea type="text" id="ketqua" ></textarea>
+    <script>
+        let a=["tôi","là","một","lập","trình","viên"];
+        window.addEventListener("input",checkkeydown);
+        let count=0;
+        function checkkeydown(evt){
+           
+            count++;
+            if(count>a.length){
+            count=0;
+            
+            }
+            let str="";
+            for(let i=0;i<count;i++){
+                str+=a[i]+" ";
+            }
+            
+            document.getElementById("ketqua").value=str;
+
+        }
+    </script>
+</body>
+</html>

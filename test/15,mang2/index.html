@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+        
+        td {
+            width: 40px;
+            height: 40px;
+            border: 1px solid black;
+            text-align: center;
+            cursor: pointer;
+            align-items: center;
+        }
+        table {
+            border-collapse: collapse;
+            margin-top: 20px;
+            
+        }
+        
+    </style>
+<body>
+    
+    <input type="text" id="ngang" placeholder="hang">
+    <input type="text" id="doc" placeholder="cot">
+    <button type="button" onclick="taobanco()">tạo bảng</button>
+    <table id="caro"></table>
+    <p id="ketqua"></p>
+    <script>
+        
+        let banco=document.getElementById("caro");
+        const PLAY_X="X";
+        const PLAY_O="O";
+        let turn=PLAY_X;
+        let a=[];
+        let check=false;
+                function taobanco(){
+            let ngang=document.getElementById("ngang").value;
+            let doc=document.getElementById("doc").value;
+            let str="";
+            for(let i=0;i<ngang;i++){
+                 a[i]=[];
+                str+="<tr>"
+                    for(let j=0;j<doc;j++){
+                        a[i][j]="";
+                        str+="<td  onclick='clickcell(this,"+i+","+j+")'></td>"
+                    }
+                    str+="</tr>"
+            }
+            banco.innerHTML=str;
+            console.log(str);
+        }
+        function clickcell(cell,x,y){
+            if (check) return;
+            if (cell.innerHTML !== "") return;
+            cell.innerHTML=turn;
+            if(turn==PLAY_X){
+                cell.innerHTML=PLAY_X;
+                cell.style.color="red"
+                a[x][y]=PLAY_X;
+                turn=PLAY_O;
+            }
+            else {
+                cell.innerHTML=PLAY_O;
+                cell.style.color="blue";
+                a[x][y]=PLAY_O;
+                turn=PLAY_X;
+            }
+            checkwin(x,y)
+        }
+        function checkwin(x,y){
+            let count=1;
+            
+            //check sang phải
+            let i=1;
+            while(y+i<a[x].length&& a[x][y+i]==a[x][y]){
+                count++;
+                i++;
+            }
+            //check sang trái
+            let i1=1;
+            while(y-i1>=0 && a[x][y-i1]==a[x][y]){
+                count++;
+                i1++;
+            }
+            //check lên trên
+            let i2=1;
+            while (x-i2>=0 && a[x-i2][y]==a[x][y]){
+                count++;
+                i2++;
+            }
+            // check xuong duoi
+            let i3=1;
+            while (x+i3<a[y].length && a[x+i3][y]==a[x][y]){
+                count++;
+                i3++;
+            }
+            // check chéo lên phải từ vị trí cuối
+            let i4=1;
+            let j4=1;
+            while(x-i4>=0&&y+j4<a[x].length&&a[x-i4][y+j4]==a[x][y]){
+                count++;
+                i4++;
+                j4++;
+            }
+            //check  từ vị trí cuối chéo lên trái
+            let i5=1;
+            let j5=1;
+            while(x-i5>=0&&y-j5>=0&&a[x-i5][y-j5]==a[x][y]){
+                count++;
+                i5++;
+                j5++;
+            }
+            //check  từ vị trí cuối chéo xuống trái
+            let i6=1;
+            let j6=1;
+            while(x+i6<a[y].length&&y-j6>=0&&a[x+i6][y-j6]==a[x][y]){
+                count++;
+                i6++;
+                j6++;
+            }
+            //check  từ vị trí cuối chéo xuống phải
+            let i7=1;
+            let j7=1;
+            while (x+i7<a[y].length&&y+j7<a[x].length&&a[x+i7][y+j7]==a[x][y]){
+                count++;
+                i7++;
+                j7++;
+            }
+            if(count>=5)
+            {   
+                document.getElementById("ketqua").innerHTML=(a[x][y]+" win");
+                check=true;
+                
+                
+            }
+            
+        }
+        
+    </script>
+</body>
+</html>
+<!-- cờ caro:
+ b1: vẽ bàn cờ
+ b2: click vào 1 ô
+ b3: x,o theo lượt
+ b4: kiểm tra thắng thua -->
+ 
+ 

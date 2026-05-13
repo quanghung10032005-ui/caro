@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let a=["a","b","c","d","e"];
+        //cách 1: :tạo mảng rỗng
+            // b1: tạo mảng rỗng
+            // b2: lấy ra phần tử cuối mảng và push vào mảng rỗng
+            // b3: trả lại output
+        //cách 2 : duyệt từ đầu và cuối và đổi chỗ
+
+        function daonguoc(a){
+            let result=[];
+            for(let i=a.length-1;i>=0;i--){
+                result.push(a[i]);
+            }
+            return result;
+        }
+        
+        function daonguoc2(a){
+            let i=0;
+            let j=a.length-1;
+            while(a[i]<a[j]){
+                let temp=a[i];
+                a[i]=a[j];
+                a[j]=temp;
+                i++;
+                j--;
+            }
+            return a;
+        }
+        console.log(a);
+        console.log(daonguoc2(a));
+    </script>
+</body>
+</html>
