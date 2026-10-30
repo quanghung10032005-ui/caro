@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cửa hàng Hoa Quả H-Fruits</title>
+</head>
+<style>
+    
+    body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+h1{
+    color: #2c3e50;
+    font-size:32px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 3px solid #2ecc71;
+    padding-bottom: 8px;
+}
+table{
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+th{
+    background-color: #2ecc71;
+    color: white;
+    font-weight: 600;
+    padding: 10px;
+    text-align: center;
+}
+th:first-child {
+    border-top-left-radius: 6px;
+}
+th:last-child {
+    border-top-right-radius: 6px;
+}
+td {
+    padding: 5px;
+    border-bottom: 1px solid #b4b5b6;
+    color: #495057;
+}
+tr:hover td {
+    background-color: #f1fcf5;
+}
+button, .btn {
+    font-family: inherit;
+    font-size: 14px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background-color: rgb(217, 246, 246);
+    color:rgb(250, 29, 180);
+}
+button:hover{
+    background-color: rgb(213, 233, 250);
+}
+
+input{
+    padding:8px;
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid #9b9a9a; 
+    background-color: aliceblue;
+    
+}
+input:hover{
+    background-color: #ecf8f1;
+}
+
+
+</style>
+<body>
+    <!-- xây dựng quản lý sản phẩm - cửa hàng hoa quả 
+     CRUD : Create,Read,Update,Delete
+     -Read
+     -Create
+     -Delete
+     -Update
+      -->
+     <h1>Danh sách nhân viên</h1>
+     
+     <form action="" id="add_form" style="display: none;">
+        <input type="text" id="txtHoten" placeholder="Nhập tên"><br>
+        <input type="number" id="txtTuoi" placeholder="Nhập tuổi"><br>
+        <input type="text" id="txtChucvu" placeholder="Nhập chức vụ"><br>
+        <button type="button" onclick="add()">Thêm</button>
+        <button type="button" onclick="closeaddform()">Đóng</button>
+     </form> 
+     <form action="" id="update_form" style="display: none;">
+        <input type="text" id="updateHoten" placeholder="Nhập tên"><br>
+        <input type="number" id="updateTuoi" placeholder="Nhập tuổi"><br>
+        <input type="text" id="updateChucvu" placeholder="Nhập chức vụ"><br>
+        <button type="button" onclick="update(currentSelect)">Cập Nhật</button>
+        <button type="button" onclick="closeupdateform()">Đóng</button>
+     </form>
+     <table border="1" id="list_nv"></table>
+     <button type="button" id="addNhanvien" onclick="showaddform()">Thêm nhân viên</button>
+     <script>
+        let currentSelect=-1;
+        let list=document.getElementById("list_nv");
+        let nhanVien=[
+            ["Nguyễn Quang Hưng",21,"Giám đốc"],
+            ["Nguyễn Quang Thắng",15,"Nhân Viên"],
+            ["Nguyên Thu Hương",25,"Quản Lý"],
+            ["Nguyễn Thị Quỳnh Anh",17,"Nhân Viên"],
+        ]
+        function displayall(){
+            
+            let str=`<tr>
+                        <th>STT</th>
+                        <th>Họ tên</th>
+                        <th>Tuổi</th>
+                        <th>Chức vụ</th>
+                        <th colspan="2">Thao tác</th>
+                    </tr>`
+            for(let i=0;i<nhanVien.length;i++){
+                str+=`<tr>
+                        <td>${i+1}</td>
+                        <td>${nhanVien[i][0]}</td>
+                        <td>${nhanVien[i][1]}</td>
+                        <td>${nhanVien[i][2]}</td>
+                        <td><button type="button" onclick="deletenv(${i})">xóa</button></td>
+                        <td><button type="button" onclick="editnv(${i})">Sửa</button></td>
+
+                    </tr>`
+            }
+            list.innerHTML=str;
+        }    
+        
+        function add(){
+            let name=document.getElementById("txtHoten").value;
+            let age=document.getElementById("txtTuoi").value;
+            let chucvu=document.getElementById("txtChucvu").value;
+            let newNv=[name,age,chucvu];
+            if(name==""||age==""||chucvu==""){
+            alert("vui lòng nhập đầy đủ thông tin");
+            
+            return;
+            }
+            nhanVien.push(newNv);
+            document.getElementById("add_form").reset();
+            alert("thêm thành công");
+            displayall();
+        }
+        function deletenv(index){
+            nhanVien.splice(index,1);
+            displayall();
+        }
+        function editnv(index){
+            document.getElementById("updateHoten").value=nhanVien[index][0];
+            document.getElementById("updateTuoi").value=nhanVien[index][1];
+            document.getElementById("updateChucvu").value=nhanVien[index][2];
+            currentSelect=index;
+            showupdateform();
+        }
+        function update(index){
+            let name=document.getElementById("updateHoten").value;
+            let age=document.getElementById("updateTuoi").value;
+            let chucvu=document.getElementById("updateChucvu").value;
+            let newNv=[name,age,chucvu];
+            if(name==""||age==""||chucvu==""){
+                alert("vui lòng nhập đầy đủ thông tin");
+                return;
+            }
+            nhanVien[index]=newNv;
+            displayall();
+        }
+        function showaddform(){
+            document.getElementById("add_form").style.display="block";
+            document.getElementById("addNhanvien").style.display="none";
+        }
+        function closeaddform(){
+            document.getElementById("add_form").style.display="none";
+            document.getElementById("addNhanvien").style.display="block";
+        }
+        function showupdateform(){
+            document.getElementById("update_form").style.display="block";
+        }
+        function closeupdateform(){
+            document.getElementById("update_form").style.display="none";
+        }
+        displayall();
+     </script>
+</body>
+</html>

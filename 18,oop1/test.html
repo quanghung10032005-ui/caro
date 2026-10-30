@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="student.js"></script>
+</head>
+<body>
+    <h1>Quản Lý Học Sinh</h1>
+    <form action="" id="add_form">
+        <fieldset>
+            <legend>Thêm học viên mới</legend>
+            <input type="text" id="addName" placeholder="Nhập tên"><br>
+            <input type="number" id="addAge" placeholder="Nhập tuổi">
+            <button type="button" onclick="Add()">Thêm</button>
+            <button type="button" >Đóng</button>
+        </fieldset>
+    </form>
+    <form action="" id="add_point" style="display: none;">
+        <fieldset>
+            <legend>Thêm điểm</legend>
+            <input type="number" id="pointMath" placeholder="Nhập điểm toán"><br>
+            <input type="number" id="pointPhysics" placeholder="Nhập điểm lý" ><br>
+            <input type="number" id="pointChemistry" placeholder="Nhập điểm hóa">
+            <button type="button" onclick="addPoint(currentSelect)">Thêm</button>
+            <button type="button" onclick="closeAdd_point()">Đóng</button><br>
+        </fieldset>
+    </form>
+    <table  border="1">
+        <thead>
+        <tr>
+            <th>Tên học sinh</th>
+            <th>Tuổi</th>
+            <th>Điểm toán</th>
+            <th>Điểm lý</th>
+            <th>Điểm hóa</th>
+            <th>Tổng Điểm</th>
+            <th>Thao tác</th>
+        </tr>
+        </thead>
+        <tbody id="student_list"></tbody>
+    </table>
+    <script>
+        let currentSelect=-1;
+        let student=[];
+        student[0]=new Student("Nguyễn Quang Hưng",22);
+        student[1]=new Student("Nguyễn Quang Thắng",16);
+        student[2]=new Student("Nguyễn Thu Hương",26);
+        student[0].setPoint(9,9,10);
+        student[1].setPoint(1,2,3);
+        student[2].setPoint(4,5,6);
+        function showAll(){
+            let str="";
+            for(let i=0;i<student.length;i++){
+                str+=`<tr>
+                            <td>${student[i].name}</td>
+                            <td>${student[i].age}</td>
+                            <td>${student[i].math}</td>
+                            <td>${student[i].physics}</td>
+                            <td>${student[i].chemistry}</td>
+                            <td>${student[i].getsum()}</td>
+                            <td><button type="button" onclick="editPoint(${i})">Thêm Điểm</button></td>
+                    </tr>`;
+            }
+            document.getElementById("student_list").innerHTML=str;
+        }
+        
+        function Add(){
+            let name=document.getElementById("addName").value;
+            let age=document.getElementById("addAge").value;
+            let newStudent=new Student(name,age);
+            if(name==""||age==""){
+                alert("vui lòng nhập đầy đủ thông tin");
+                document.getElementById("add_form").reset();
+                return;
+            }
+            student.push(newStudent);
+            showAll();
+
+        }
+        function editPoint(index){
+            document.getElementById("pointMath").value=student[index].math;
+            document.getElementById("pointPhysics").value=student[index].physics;
+            document.getElementById("pointChemistry").value=student[index].chemistry;
+            currentSelect=index;
+            showAddPoint();
+
+        }
+        function addPoint(index){
+            let math=document.getElementById("pointMath").value;
+            let physics=document.getElementById("pointPhysics").value;
+            let chemistry=document.getElementById("pointChemistry").value;
+            if(math==""||physics==""||chemistry==""){
+                alert("vui lòng nhập đầy đủ thông tin");
+                document.getElementById("add_point").reset();
+                return;
+            }
+            student[index].setPoint(+math, +physics, +chemistry);
+            showAll();
+        }
+        function closeAdd_point(){
+            document.getElementById("add_point").style.display="none";
+        }
+        function showAddPoint(){
+            document.getElementById("add_point").style.display="block";
+        }
+        showAll();
+    </script>
+</body>
+</html>

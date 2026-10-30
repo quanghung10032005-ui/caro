@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="Card.js"></script>
+    <script src="player.js"></script>
+</head>
+<div id="card-desk">
+    
+</div>
+<div id="player1"></div>
+<div id="player2"></div>
+<div id="result"></div>
+<body>
+     <!-- <script src="main.js"></script> -->
+      <script>
+        let desk=document.getElementById("card-desk");
+        let player1html=document.getElementById("player1");
+        let player2html=document.getElementById("player2");
+        let cards=[];
+        let values=['A','2','3','4','5','6','7','8','9'];
+        let suits=['H','D','C','S'];
+        let player1= new Player("Nguyễn Quang Thắng");
+        let player2=new Player("Đỗ Đức Duy");
+        function createCards(){ 
+            for(let i=0;i<values.length;i++){
+                for (let j=0;j<suits.length;j++){
+                    let card=new Card(values[i],suits[j]);
+                    cards.push(card);
+                }
+            }
+        }
+        function showCards(){
+            let str="";
+            for(let i=0;i<cards.length;i++){
+                str+=cards[i].getImages();
+            }
+            desk.innerHTML=str;
+        }
+        function tronbai(){
+            for(let i=0;i<cards.length;i++){
+                let indexrandom=Math.floor(Math.random()*cards.length)
+                let tmp=cards[i];
+                cards[i]=cards[indexrandom];
+                cards[indexrandom]=tmp;
+
+            }
+        }
+        function get3Cards(player){
+            for(let i=0;i<3;i++){
+                player.addCard(cards.pop())
+                // player.push(card);
+            }
+        }
+        // function showCardPlayer1(){
+        //     let str="";
+        //     for(let i=0;i<player1.length;i++){
+        //         str+=player1[i].getImages();
+        //     }
+        //     document.getElementById("player1").innerHTML=str;
+
+        // }
+        // function showCardPlayer2(){
+        //     let str="";
+        //     for(let i=0;i<player2.length;i++){
+        //         str+=player2[i].getImages();
+        //     }
+        //     document.getElementById("player2").innerHTML=str;
+
+        // }
+        // function tongdiem(player){
+        //     let sum=0;
+        //     for(let i=0;i<player.length;i++){
+        //         sum+=player[i].getValue();
+        //     }
+        //     if(sum%10==0)
+        //     return sum=10;
+        //     return sum%10;
+        // }
+        function checkwin(){
+            let player1Score=player1.tongdiem();
+            let player2Score=player2.tongdiem();
+            let str=`player1: ${player1Score} <br>
+                     player2: ${player2Score} <br>`
+            if(player1Score> player2Score)
+            str+= `player 1 win`
+            else if(player1Score<player2Score)
+            str+=`player 2 win`
+        else str+=`Hòa`
+        document.getElementById("result").innerHTML=str;
+            
+        }
+        createCards();
+        tronbai();
+        get3Cards(player1);
+        get3Cards(player2);
+        player1.hienthibai(player1html);
+        player2.hienthibai(player2html);
+        console.log(player1);
+        console.log(player2);
+        checkwin();
+      </script>
+</body>
+</html>

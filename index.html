@@ -1,34 +1,378 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<style>
-        
-        td {
-            width: 40px;
-            height: 40px;
-            border: 1px solid black;
-            text-align: center;
-            cursor: pointer;
+    <meta name="theme-color" content="#10172a">
+    <title>Caro Club - Đấu trí từng nước đi</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            padding: 44px 20px;
+            background:
+                radial-gradient(ellipse at 18% 0%, rgba(74, 107, 230, 0.2), transparent 36%),
+                radial-gradient(ellipse at 100% 80%, rgba(21, 184, 166, 0.1), transparent 35%),
+                #10172a;
+            color: #eef2ff;
+            font-family: Inter, "Segoe UI", sans-serif;
+        }
+
+        .app {
+            width: min(100%, 980px);
+            margin: 0 auto;
+        }
+
+        .topbar {
+            display: flex;
             align-items: center;
+            gap: 14px;
+            margin-bottom: 28px;
         }
-        table {
-            border-collapse: collapse;
-            margin-top: 20px;
-            
+
+        .logo {
+            display: grid;
+            width: 48px;
+            height: 48px;
+            place-items: center;
+            border: 1px solid rgba(125, 151, 255, 0.35);
+            border-radius: 15px;
+            background: linear-gradient(145deg, #667ef5, #435bd1);
+            box-shadow: 0 8px 24px rgba(67, 91, 209, 0.35);
+            color: #fff;
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: -3px;
+            padding-right: 3px;
         }
-        
+
+        .brand-name {
+            margin: 0;
+            font-size: 17px;
+            font-weight: 750;
+        }
+
+        .brand-caption {
+            margin: 3px 0 0;
+            color: #9aa8c7;
+            font-size: 12px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 270px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .board-card,
+        .side-card {
+            border: 1px solid rgba(160, 180, 220, 0.14);
+            border-radius: 22px;
+            background: rgba(26, 37, 62, 0.88);
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+        }
+
+        .board-card {
+            min-width: 0;
+            padding: 24px;
+        }
+
+        .board-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(22px, 4vw, 29px);
+            letter-spacing: -0.8px;
+        }
+
+        .subtitle {
+            margin: 7px 0 0;
+            color: #9aa8c7;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .turn-badge {
+            flex: 0 0 auto;
+            padding: 8px 12px;
+            border: 1px solid rgba(111, 139, 255, 0.28);
+            border-radius: 999px;
+            background: rgba(90, 116, 235, 0.12);
+            color: #c5d0ff;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .board-scroll {
+            overflow: auto;
+            padding: 3px 2px 8px;
+            border-radius: 12px;
+        }
+
+        #caro {
+            margin: 0 auto;
+            border-spacing: 4px;
+            border-collapse: separate;
+        }
+
+        #caro td {
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            border: 1px solid rgba(150, 171, 215, 0.16);
+            border-radius: 9px;
+            background: #202c47;
+            cursor: pointer;
+            font-size: 21px;
+            font-weight: 800;
+            text-align: center;
+            transition: border-color 120ms ease, background 120ms ease, transform 120ms ease;
+        }
+
+        #caro td:hover {
+            border-color: rgba(137, 157, 255, 0.7);
+            background: #2a395b;
+            transform: translateY(-1px);
+        }
+
+        .board-hint {
+            margin: 15px 0 0;
+            color: #8492b1;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .side-card {
+            padding: 20px;
+        }
+
+        .side-card + .side-card {
+            margin-top: 16px;
+        }
+
+        .side-title {
+            margin: 0 0 16px;
+            font-size: 14px;
+            font-weight: 750;
+        }
+
+        .status {
+            display: flex;
+            min-height: 54px;
+            align-items: center;
+            gap: 11px;
+            margin-bottom: 19px;
+            padding: 12px;
+            border: 1px solid rgba(160, 180, 220, 0.14);
+            border-radius: 13px;
+            background: rgba(11, 18, 34, 0.45);
+        }
+
+        .status-dot {
+            width: 9px;
+            height: 9px;
+            flex: 0 0 auto;
+            border-radius: 50%;
+            background: #7d91ff;
+            box-shadow: 0 0 12px rgba(125, 145, 255, 0.7);
+        }
+
+        .status p {
+            margin: 0;
+            color: #dce4fb;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .field-label {
+            display: block;
+            margin: 0 0 7px;
+            color: #b6c1dc;
+            font-size: 12px;
+            font-weight: 650;
+        }
+
+        .dimensions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .dimension-input {
+            width: 100%;
+            height: 42px;
+            padding: 0 11px;
+            border: 1px solid rgba(160, 180, 220, 0.14);
+            border-radius: 10px;
+            background: #121b30;
+            color: #f1f4ff;
+        }
+
+        .dimension-input:focus {
+            border-color: #8295ff;
+            outline: 2px solid rgba(130, 149, 255, 0.25);
+        }
+
+        .primary-button {
+            width: 100%;
+            min-height: 42px;
+            border: 0;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #7186ff, #5269e8);
+            box-shadow: 0 8px 20px rgba(82, 105, 232, 0.22);
+            color: #fff;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            transition: transform 120ms ease, filter 120ms ease;
+        }
+
+        .primary-button:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        .helper {
+            margin: 13px 0 0;
+            color: #8592af;
+            font-size: 11px;
+            line-height: 1.55;
+        }
+
+        .rules {
+            display: grid;
+            gap: 12px;
+            margin: 0;
+            padding: 0;
+            color: #aebbd7;
+            font-size: 12px;
+            line-height: 1.5;
+            list-style: none;
+        }
+
+        .rules li {
+            display: flex;
+            gap: 9px;
+        }
+
+        .rule-number {
+            color: #91a2ff;
+            font-weight: 800;
+        }
+
+        @media (max-width: 760px) {
+            body {
+                padding: 28px 14px;
+            }
+
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .board-card {
+                padding: 18px 12px;
+            }
+
+            .board-heading {
+                gap: 8px;
+            }
+
+            #caro {
+                border-spacing: 3px;
+            }
+
+            #caro td {
+                width: 32px;
+                height: 32px;
+                font-size: 18px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
+</head>
 <body>
-    
-    <input type="text" id="ngang" placeholder="hang">
-    <input type="text" id="doc" placeholder="cot">
-    <button type="button" onclick="taobanco()">tạo bảng</button>
-    <table id="caro"></table>
-    <p id="ketqua"></p>
+    <main class="app">
+        <header class="topbar">
+            <div class="logo" aria-hidden="true">XO</div>
+            <div>
+                <p class="brand-name">Caro Club</p>
+                <p class="brand-caption">Một ván cờ, một cuộc đấu trí</p>
+            </div>
+        </header>
+
+        <div class="layout">
+            <section class="board-card" aria-labelledby="page-title">
+                <div class="board-heading">
+                    <div>
+                        <h1 id="page-title">Sẵn sàng đấu?</h1>
+                        <p class="subtitle">Nối 5 quân liên tiếp để giành chiến thắng.</p>
+                    </div>
+                    <div class="turn-badge">X đi trước</div>
+                </div>
+                <div class="board-scroll">
+                    <table id="caro" aria-label="Bàn cờ caro"></table>
+                </div>
+                <p class="board-hint">X đi trước · Chúc bạn có một ván cờ vui!</p>
+            </section>
+
+            <aside aria-label="Thông tin và điều khiển">
+                <section class="side-card">
+                    <h2 class="side-title">Ván đấu</h2>
+                    <div class="status">
+                        <span class="status-dot" aria-hidden="true"></span>
+                        <p id="ketqua">Tạo bàn cờ mới để bắt đầu ván đấu.</p>
+                    </div>
+
+                    <form onsubmit="taobanco(); return false;">
+                        <p class="field-label">Kích thước bàn cờ</p>
+                        <div class="dimensions">
+                            <div>
+                                <label class="field-label" for="ngang">Số hàng</label>
+                                <input class="dimension-input" type="number" id="ngang" min="6" required value="15">
+                            </div>
+                            <div>
+                                <label class="field-label" for="doc">Số cột</label>
+                                <input class="dimension-input" type="number" id="doc" min="6" required value="15">
+                            </div>
+                        </div>
+                        <button class="primary-button" type="submit">Tạo bàn mới</button>
+                    </form>
+                    <p class="helper">Số hàng và số cột phải lớn hơn 5.</p>
+                </section>
+
+                <section class="side-card">
+                    <h2 class="side-title">Luật chơi nhanh</h2>
+                    <ol class="rules">
+                        <li><span class="rule-number">01</span><span>Hai người chơi lần lượt đánh X và O.</span></li>
+                        <li><span class="rule-number">02</span><span>Nối đủ 5 quân theo hàng, cột hoặc đường chéo để thắng.</span></li>
+                        <li><span class="rule-number">03</span><span>Người chơi X sẽ bắt đầu ván mới.</span></li>
+                    </ol>
+                </section>
+            </aside>
+        </div>
+    </main>
     <script>
         
         let banco=document.getElementById("caro");
@@ -121,7 +465,7 @@
                 count++;
                 i6++;
                 j6++;
-            }
+            }                                                                                                                                                                            
             //check  từ vị trí cuối chéo xuống phải
             let i7=1;
             let j7=1;
